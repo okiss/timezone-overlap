@@ -1,30 +1,72 @@
-<script>
-	export let name;
+<script lang="ts">
+  import { countSlots, createTimeSlotArray, mergeSlotListsWithTimezones } from './timeSlotUtil';
+  import TimeSelect from './components/TimeSlotSelect.svelte';
+  import { URLState, URL_PARAMS } from './urlState';
+  import LocationInput from './components/LocationInput.svelte';
+
+  export let googleMapsInitPromise: Promise<void>;
+
+  const urlState = new URLState();
+
+  let slotsA: boolean[];
+  let slotsB: boolean[] = createTimeSlotArray(9, 17);
+  let offsetA = urlState.get(URL_PARAMS.TIME_ZONE_A) || 0;
+  let offsetB = urlState.get(URL_PARAMS.TIME_ZONE_B) || 0;
+
+  let slotACount: number;
+  let slotBCount: number;
+  let overlapCount: number;
+
+  $: slotACount = countSlots(slotsA);
+  $: slotBCount = countSlots(slotsB);
+  $: overlapCount =
+    slotsA && slotsB
+      ? countSlots(mergeSlotListsWithTimezones(slotsA, slotsB, offsetA, offsetB))
+      : 0;
+
+  let translate = 0;
+  $: {
+    let offsetDiff = offsetB - offsetA;
+    if (offsetDiff > 12) {
+      offsetDiff -= 24;
+    }
+    if (offsetDiff < -12) {
+      offsetDiff += 24;
+    }
+    translate = offsetDiff * 20;
+  }
+
+  $: {
+    urlState.saveState({
+      [URL_PARAMS.TIME_ZONE_A]: offsetA,
+      [URL_PARAMS.TIME_ZONE_B]: offsetB,
+    });
+  }
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+  <input type="number" bind:value={offsetA} min={-12} max={12} />
+  <input type="number" bind:value={offsetB} min={-12} max={12} />
+  <div class="timeselect-align" style="transform: translateX({translate}px)">
+    <TimeSelect bind:value={slotsA} />
+  </div>
+  <div class="timeselect-align" style="transform: translateX({-translate}px)">
+    <TimeSelect bind:value={slotsB} mirrorLayout={true} />
+  </div>
+  {slotACount}
+  {slotBCount}
+  {overlapCount}
+  <LocationInput />
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+  main {
+    overflow-x: hidden;
+  }
+  .timeselect-align {
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 </style>

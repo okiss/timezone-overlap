@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset='utf-8'>
-	<meta name='viewport' content='width=device-width,initial-scale=1'>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-	<title>Svelte app</title>
+    <title>Timezone Overlap</title>
 
-	<link rel='icon' type='image/png' href='/favicon.png'>
-	<link rel='stylesheet' href='/global.css'>
-	<link rel='stylesheet' href='/build/bundle.css'>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/global.css" />
+    <link rel="stylesheet" href="/build/bundle.css" />
 
-	<script defer src='/build/bundle.js'></script>
-</head>
+    <script defer src="/build/bundle.js"></script>
+    <script
+      async
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=googleMapsInitCallback"
+    ></script>
+  </head>
 
-<body>
-</body>
+  <body>
+    <script>
+      let resolveGoogleMapsInit;
+      window.googleMapsInitPromise = new Promise((resolve, reject) => {
+        resolveGoogleMapsInit = resolve;
+        setTimeout(reject, 30000);
+      });
+      window.googleMapsInitCallback = function () {
+        resolveGoogleMapsInit();
+      };
+    </script>
+    <div id="root"></div>
+  </body>
 </html>
