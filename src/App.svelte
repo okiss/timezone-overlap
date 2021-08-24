@@ -3,8 +3,11 @@
   import TimeSelect from './components/TimeSlotSelect.svelte';
   import { URLState, URL_PARAMS } from './urlState';
   import LocationInput from './components/LocationInput.svelte';
+  import { initMapsContext } from './maps';
 
   export let googleMapsInitPromise: Promise<void>;
+
+  initMapsContext(googleMapsInitPromise);
 
   const urlState = new URLState();
 
