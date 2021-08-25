@@ -1,5 +1,6 @@
 import type { Handler } from '@netlify/functions';
-import { API_TYPE, googleMapsApi, HTTPError } from '../util';
+import { API_TYPE, PlaceDetailsResponse, TimezoneResponse } from '../model';
+import { googleMapsApi, HTTPError } from '../util';
 
 const handler: Handler = async (event, context) => {
   const placeId = event.queryStringParameters?.id;
@@ -11,7 +12,7 @@ const handler: Handler = async (event, context) => {
   }
 
   try {
-    const placeDetailsResponse = await googleMapsApi(
+    const placeDetailsResponse = await googleMapsApi<PlaceDetailsResponse>(
       API_TYPE.PLACE_DETAILS,
       {
         fields: 'geometry',
@@ -22,7 +23,7 @@ const handler: Handler = async (event, context) => {
 
     const { lat, lng } = placeDetailsResponse.geometry.location;
 
-    const timezoneResponse = await googleMapsApi(
+    const timezoneResponse = await googleMapsApi<TimezoneResponse>(
       API_TYPE.TIMEZONE,
       {
         location: `${lat},${lng}`,

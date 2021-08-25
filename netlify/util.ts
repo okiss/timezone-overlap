@@ -1,19 +1,14 @@
 import fetch from 'node-fetch';
 import { URLSearchParams } from 'url';
+import { API_TYPE } from './model';
 
 const GOOGLE_MAPS_API_BASE_URL = 'https://maps.googleapis.com/maps/api';
 
-export enum API_TYPE {
-  AUTOCOMPLETE = '/place/autocomplete',
-  PLACE_DETAILS = '/place/details',
-  TIMEZONE = '/timezone',
-}
-
-export async function googleMapsApi(
+export async function googleMapsApi<T>(
   api: API_TYPE,
   params: Record<string, string>,
-  validate: (responseData: any) => boolean
-) {
+  validate: (responseData: T) => boolean
+): Promise<T> {
   const urlSearchParams = new URLSearchParams(params);
   urlSearchParams.set('key', process.env.GOOGLE_MAPS_API_KEY!);
 
