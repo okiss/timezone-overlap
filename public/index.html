@@ -11,27 +11,9 @@
     <link rel="stylesheet" href="/build/bundle.css" />
 
     <script defer src="/build/bundle.js"></script>
-    <script
-      async
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhrMVxKFmFD-kJ34ItS9C5GDysNHxBRmg&libraries=places&callback=googleMapsInitCallback"
-    ></script>
   </head>
 
   <body>
-    <script>
-      let resolveGoogleMapsInit;
-      window.googleMapsInitPromise = new Promise((resolve, reject) => {
-        resolveGoogleMapsInit = resolve;
-        setTimeout(reject, 30000);
-      });
-      window.googleMapsInitCallback = function () {
-        resolveGoogleMapsInit();
-      };
-
-      fetch('.netlify/functions/autocomplete')
-        .then((x) => x.json())
-        .then(console.log);
-    </script>
     <div id="root"></div>
   </body>
 </html>

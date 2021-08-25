@@ -1,14 +1,11 @@
 <script lang="ts">
-  import { getContext } from 'svelte';
-  import { cityAutocomplete, getPlaceDetails, MAPS_CONTEXT } from '../maps';
-  import type { MapsContext, Place } from '../maps';
+  import { getTimezone, locationSearch } from '../api';
+
   import { debounce } from '../util';
 
   export let value = '';
 
-  const { mapsPromise } = getContext<MapsContext>(MAPS_CONTEXT);
-
-  let suggestions: Place[] = [];
+  let suggestions: { name: string; id: string }[] = [];
 
   const searchLocation = async (e: any) => {
     const searchText: string = e.target.value;
@@ -19,26 +16,21 @@
     }
 
     try {
-      const maps = await mapsPromise;
-      suggestions = await cityAutocomplete(maps, searchText);
+      suggestions = await locationSearch(searchText);
     } catch (error) {
       console.error(error);
     }
   };
 
   const selectSuggestion = (index: number) => async () => {
-    const details = await getPlaceDetails(suggestions[index].placeId);
+    const details = await getTimezone(suggestions[index].id);
     console.log(details);
   };
 </script>
 
-{#await mapsPromise}
-  ...loading
-{:then maps}
-  <input type="text" {value} on:input={debounce(searchLocation)} on:change={selectSuggestion(0)} />
-  <ul>
-    {#each suggestions as { description }, index}
-      <li on:click={selectSuggestion(index)}>{description}</li>
-    {/each}
-  </ul>
-{/await}
+<input type="text" {value} on:input={debounce(searchLocation)} on:change={selectSuggestion(0)} />
+<ul>
+  {#each suggestions as { name }, index}
+    <li on:click={selectSuggestion(index)}>{name}</li>
+  {/each}
+</ul>
