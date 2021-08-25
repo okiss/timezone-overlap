@@ -26,11 +26,11 @@ export async function googleMapsApi<T>(
   if (!googleResponse.ok) {
     throw new HTTPError(googleResponse.status, 'Error contacting Google Maps API');
   }
-
-  const isValidResponse = googleResponseData.status === 'OK' && validate(googleResponseData);
-
-  if (!isValidResponse) {
+  if (googleResponseData.status !== 'OK') {
     throw new HTTPError(500, 'Google Maps: ' + (googleResponseData.error_message || 'Error'));
+  }
+  if (!validate(googleResponseData)) {
+    throw new HTTPError(500, 'Google Maps: Invalid response');
   }
 
   return googleResponseData;
