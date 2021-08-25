@@ -18,7 +18,7 @@ const handler: Handler = async (event, context) => {
         fields: 'geometry',
         place_id: placeId,
       },
-      (data) => typeof data?.result?.geometry?.location?.lat === 'string'
+      (data) => typeof data?.result?.geometry?.location?.lat === 'number'
     );
 
     const { lat, lng } = placeDetailsResponse.result.geometry.location;
