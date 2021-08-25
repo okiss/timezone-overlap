@@ -27,6 +27,10 @@
       window.googleMapsInitCallback = function () {
         resolveGoogleMapsInit();
       };
+
+      fetch('.netlify/functions/autocomplete')
+        .then((x) => x.json())
+        .then(console.log);
     </script>
     <div id="root"></div>
   </body>

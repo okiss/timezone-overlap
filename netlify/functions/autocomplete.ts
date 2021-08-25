@@ -1,9 +1,11 @@
-import { Handler } from '@netlify/functions';
+import type { Handler } from '@netlify/functions';
+import fetch from 'node-fetch';
+import { URLSearchParams } from 'url';
 
 const AUTOCOMPLETE_API_URL = 'https://maps.googleapis.com/maps/api/place/autocomplete';
 
 const handler: Handler = async (event, context) => {
-  const query = event.queryStringParameters.query;
+  const query = event.queryStringParameters?.query;
   if (!query) {
     return {
       statusCode: 400,
@@ -12,8 +14,8 @@ const handler: Handler = async (event, context) => {
   }
 
   const params = new URLSearchParams();
-  params.set('key', process.env.GOOGLE_MAPS_API_KEY);
-  params.set('input', event.queryStringParameters.query);
+  params.set('key', process.env.GOOGLE_MAPS_API_KEY!);
+  params.set('input', query);
   params.set('types', '(cities)');
 
   const placesResponse = await fetch(`${AUTOCOMPLETE_API_URL}/json?${params.toString()}`);
@@ -26,7 +28,10 @@ const handler: Handler = async (event, context) => {
     };
   }
 
-  if (placesResponseData.status !== 'OK') {
+  const isValidResponse =
+    placesResponseData.status === 'OK' && Array.isArray(placesResponseData?.predictions);
+
+  if (!isValidResponse) {
     return {
       statusCode: 500,
       body: JSON.stringify({
@@ -35,10 +40,12 @@ const handler: Handler = async (event, context) => {
     };
   }
 
-  const data = placesResponseData.predictions.map(({ description, place_id }) => ({
-    city: description,
-    placeId: place_id,
-  }));
+  const data = placesResponseData.predictions.map(
+    ({ description, place_id }: { description: string; place_id: string }) => ({
+      name: description,
+      id: place_id,
+    })
+  );
 
   return {
     statusCode: 200,
