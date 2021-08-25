@@ -1,5 +1,5 @@
 export async function locationSearch(query: string): Promise<{ name: string; id: string }[]> {
-  const response = await fetch(`.netlify/functions/locationSearch?query=${query}`);
+  const response = await fetch(`${NETLIFY_URL}/.netlify/functions/locationSearch?query=${query}`);
   if (!response.ok) {
     throw new Error(response.statusText);
   }
@@ -10,7 +10,7 @@ export async function locationSearch(query: string): Promise<{ name: string; id:
 export async function getTimezone(
   id: string
 ): Promise<{ rawOffset: number; timeZoneName: string }> {
-  const response = await fetch(`.netlify/functions/timezone?id=${id}`);
+  const response = await fetch(`${NETLIFY_URL}/.netlify/functions/timezone?id=${id}`);
   if (!response.ok) {
     throw new Error(response.statusText);
   }
