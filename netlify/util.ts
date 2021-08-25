@@ -17,7 +17,11 @@ export async function googleMapsApi<T>(
   );
   const googleResponseData = await googleResponse.json();
 
-  console.log({ googleResponse, googleResponseData });
+  console.log({
+    url: googleResponse.url,
+    status: googleResponse.status,
+    data: JSON.stringify(googleResponseData),
+  });
 
   if (!googleResponse.ok) {
     throw new HTTPError(googleResponse.status, 'Error contacting Google Maps API');

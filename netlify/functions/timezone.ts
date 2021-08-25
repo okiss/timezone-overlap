@@ -21,8 +21,6 @@ const handler: Handler = async (event, context) => {
       (data) => true // typeof data?.geometry?.location?.lat === 'string'
     );
 
-    console.log({ placeDetailsResponse });
-
     const { lat, lng } = placeDetailsResponse.geometry.location;
 
     const timezoneResponse = await googleMapsApi<TimezoneResponse>(
