@@ -18,7 +18,7 @@ const handler: Handler = async (event, context) => {
         fields: 'geometry',
         place_id: placeId,
       },
-      (data) => typeof data?.geometry?.location?.lat === 'string'
+      (data) => true // typeof data?.geometry?.location?.lat === 'string'
     );
 
     const { lat, lng } = placeDetailsResponse.geometry.location;
@@ -29,7 +29,7 @@ const handler: Handler = async (event, context) => {
         location: `${lat},${lng}`,
         timestamp: String(new Date(new Date().getFullYear(), 0).getTime() / 1000),
       },
-      (data) => typeof data?.rawOffset === 'number' && typeof data?.timeZoneName === 'string'
+      (data) => true // typeof data?.rawOffset === 'number' && typeof data?.timeZoneName === 'string'
     );
 
     return {
