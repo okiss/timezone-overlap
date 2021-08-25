@@ -12,10 +12,12 @@ export type AutocompleteResponse = {
 };
 
 export type PlaceDetailsResponse = {
-  geometry: {
-    location: {
-      lat: number;
-      lng: number;
+  result: {
+    geometry: {
+      location: {
+        lat: number;
+        lng: number;
+      };
     };
   };
 };
