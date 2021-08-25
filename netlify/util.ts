@@ -23,13 +23,13 @@ export async function googleMapsApi(
   const googleResponseData = await googleResponse.json();
 
   if (!googleResponse.ok) {
-    throw new HTTPError(googleResponse.status);
+    throw new HTTPError(googleResponse.status, 'Error contacting Google Maps API');
   }
 
   const isValidResponse = googleResponseData.status === 'OK' && validate(googleResponseData);
 
   if (!isValidResponse) {
-    throw new HTTPError(500, 'Google Maps: ' + googleResponseData.error_message || 'Error');
+    throw new HTTPError(500, 'Google Maps: ' + (googleResponseData.error_message || 'Error'));
   }
 
   return googleResponseData;
@@ -41,7 +41,7 @@ export class HTTPError extends Error {
     body: string;
   };
 
-  constructor(statusCode: number, message = 'Error') {
+  constructor(statusCode: number, message: string) {
     super(message);
     this.response = {
       statusCode,

@@ -33,10 +33,7 @@ const handler: Handler = async (event, context) => {
     if (error instanceof HTTPError) {
       return error.response;
     }
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: 'Error' }),
-    };
+    throw error;
   }
 };
 
