@@ -6,7 +6,6 @@ import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
-import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -43,10 +42,6 @@ export default {
     file: 'public/build/bundle.js',
   },
   plugins: [
-    replace({
-      NETLIFY_URL: `"${process.env.NETLIFY_URL}"` || '',
-    }),
-
     svelte({
       preprocess: sveltePreprocess({ sourceMap: !production }),
       compilerOptions: {
