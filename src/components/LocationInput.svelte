@@ -51,6 +51,7 @@
     }
     value = suggestions[selectedSuggestionIndex].name;
     input.blur();
+    suggestions = [];
     dispatch('submit' as any, suggestions[selectedSuggestionIndex].id);
   };
 
