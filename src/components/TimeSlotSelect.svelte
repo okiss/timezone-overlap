@@ -109,6 +109,7 @@
     display: flex;
     flex-direction: row;
     cursor: pointer;
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.1));
   }
   .is-selecting {
     cursor: ew-resize;

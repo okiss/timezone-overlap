@@ -1,70 +1,39 @@
 <script lang="ts">
-  import { countSlots, createTimeSlotArray, mergeSlotListsWithTimezones } from './timeSlotUtil';
-  import TimeSelect from './components/TimeSlotSelect.svelte';
-  import { URLState, URL_PARAMS } from './urlState';
-  import LocationInput from './components/LocationInput.svelte';
+  import TimeSlots from './components/TimeSlots.svelte';
+  import TimezoneInput from './components/TimezoneInput.svelte';
 
-  const urlState = new URLState();
+  let offsetA = 0;
+  let offsetB = 0;
+  let overlap = 0;
 
-  let slotsA: boolean[];
-  let slotsB: boolean[] = createTimeSlotArray(9, 17);
-  let offsetA = urlState.get(URL_PARAMS.TIME_ZONE_A) || 0;
-  let offsetB = urlState.get(URL_PARAMS.TIME_ZONE_B) || 0;
-
-  let slotACount: number;
-  let slotBCount: number;
-  let overlapCount: number;
-
-  $: slotACount = countSlots(slotsA);
-  $: slotBCount = countSlots(slotsB);
-  $: overlapCount =
-    slotsA && slotsB
-      ? countSlots(mergeSlotListsWithTimezones(slotsA, slotsB, offsetA, offsetB))
-      : 0;
-
-  let translate = 0;
-  $: {
-    let offsetDiff = offsetB - offsetA;
-    if (offsetDiff > 12) {
-      offsetDiff -= 24;
-    }
-    if (offsetDiff < -12) {
-      offsetDiff += 24;
-    }
-    translate = offsetDiff * 20;
-  }
-
-  $: {
-    urlState.saveState({
-      [URL_PARAMS.TIME_ZONE_A]: offsetA,
-      [URL_PARAMS.TIME_ZONE_B]: offsetB,
-    });
-  }
+  const updateOverlap = (e: CustomEvent<number>) => {
+    overlap = e.detail;
+  };
 </script>
 
+<header>
+  <div>Timezone overlap calculator</div>
+  <div>There is {overlap} {overlap === 1 ? 'hour' : 'hours'} of overlap</div>
+</header>
 <main>
-  <input type="number" bind:value={offsetA} min={-12} max={12} />
-  <input type="number" bind:value={offsetB} min={-12} max={12} />
-  <div class="timeselect-align" style="transform: translateX({translate}px)">
-    <TimeSelect bind:value={slotsA} />
-  </div>
-  <div class="timeselect-align" style="transform: translateX({-translate}px)">
-    <TimeSelect bind:value={slotsB} mirrorLayout={true} />
-  </div>
-  {slotACount}
-  {slotBCount}
-  {overlapCount}
-  <LocationInput />
+  <TimezoneInput bind:offset={offsetA} />
+  <TimeSlots {offsetA} {offsetB} on:change={updateOverlap} />
+  <TimezoneInput bind:offset={offsetB} />
 </main>
 
 <style>
-  main {
-    overflow-x: hidden;
-  }
-  .timeselect-align {
-    transition: transform 0.2s;
+  header {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
+    background-color: #eee;
+    height: 60px;
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-6);
+    margin-top: var(--spacing-6);
   }
 </style>
