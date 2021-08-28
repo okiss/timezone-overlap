@@ -6,8 +6,9 @@
   import LoadingOverlay from './LoadingOverlay.svelte';
 
   export let isLoading = false;
+  export let placeholder = 'Location';
 
-  const dispatch = createEventDispatcher<string>();
+  const dispatch = createEventDispatcher<{ id: string; name: string }>();
 
   let value = '';
   let input: HTMLInputElement;
@@ -51,8 +52,8 @@
     }
     value = suggestions[selectedSuggestionIndex].name;
     input.blur();
+    dispatch('submit' as any, suggestions[selectedSuggestionIndex]);
     suggestions = [];
-    dispatch('submit' as any, suggestions[selectedSuggestionIndex].id);
   };
 
   const selectSuggestion = (index: number) => {
@@ -77,7 +78,7 @@
   <div class="input-wrapper" class:suggestions-visible={isFocused && suggestions.length}>
     <input
       class="input"
-      placeholder="Location"
+      {placeholder}
       type="text"
       {value}
       bind:this={input}

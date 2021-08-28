@@ -16,9 +16,17 @@
   <div class="overlap">There is {overlap} {overlap === 1 ? 'hour' : 'hours'} of overlap</div>
 </header>
 <main>
-  <TimezoneInput bind:offset={offsetA} />
-  <TimeSlots {offsetA} {offsetB} on:change={updateOverlap} />
-  <TimezoneInput bind:offset={offsetB} />
+  <div class="inputs">
+    <TimezoneInput bind:offset={offsetA} placeholder="Your location" />
+    <TimezoneInput bind:offset={offsetB} placeholder={"Client's location"} />
+  </div>
+  <TimeSlots
+    {offsetA}
+    {offsetB}
+    on:change={updateOverlap}
+    labelA="Your working hours"
+    labelB={"Client's working hours"}
+  />
 </main>
 
 <style>
@@ -40,6 +48,12 @@
     flex-direction: column;
     align-items: center;
     gap: var(--spacing-7);
-    padding-top: var(--spacing-7);
+    padding-top: var(--spacing-6);
+  }
+  .inputs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-7);
   }
 </style>

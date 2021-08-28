@@ -2,15 +2,18 @@
   import { getTimezone } from '../api';
   import LocationInput from './LocationInput.svelte';
 
-  export let offset: number;
+  export let offset = 0;
+  export let location = '';
+  export let placeholder = '';
 
   let timeZoneName = '';
   let isLoading = false;
 
-  const onLocationSelected = async (event: CustomEvent<string>) => {
+  const onLocationSelected = async (event: CustomEvent<{ id: string; name: string }>) => {
     isLoading = true;
     try {
-      const result = await getTimezone(event.detail);
+      const result = await getTimezone(event.detail.id);
+      location = event.detail.name;
       offset = Math.round(result.rawOffset / 60 / 60);
       timeZoneName = result.timeZoneName;
     } catch (error) {
@@ -22,6 +25,7 @@
 
   const onClear = () => {
     offset = 0;
+    location = '';
     timeZoneName = '';
   };
 
@@ -32,7 +36,7 @@
 </script>
 
 <div class="time-zone-input">
-  <LocationInput {isLoading} on:submit={onLocationSelected} on:clear={onClear} />
+  <LocationInput {isLoading} {placeholder} on:submit={onLocationSelected} on:clear={onClear} />
   <div class="info">
     <span class="offset">{offsetText}</span> <span>{timeZoneText}</span>
   </div>

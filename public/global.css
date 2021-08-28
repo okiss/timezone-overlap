@@ -141,6 +141,8 @@ html {
 }
 
 :root {
+  --background: white;
+
   --spacing-1: 4px;
   --spacing-2: 8px;
   --spacing-3: 12px;
@@ -151,4 +153,6 @@ html {
 
   --radius-1: 6px;
   --radius-2: 8px;
+
+  --time-slot-cell-size: 40px;
 }

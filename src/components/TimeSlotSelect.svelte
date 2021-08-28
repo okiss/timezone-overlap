@@ -78,24 +78,20 @@
   .time-select {
     display: flex;
     flex-direction: column;
-    padding-bottom: 5px;
+    padding-bottom: var(--spacing-1);
+    gap: var(--spacing-2);
   }
   .time-select.mirror {
     flex-direction: column-reverse;
-    padding-top: 5px;
+    padding-top: var(--spacing-1);
     padding-bottom: 0;
   }
   .hours {
     display: flex;
     flex-direction: row;
-    margin-bottom: 5px;
-  }
-  .time-select.mirror .hours {
-    margin-top: 5px;
-    margin-bottom: 0;
   }
   .hour {
-    width: 40px;
+    width: var(--time-slot-cell-size);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -105,7 +101,7 @@
   }
 
   .slots {
-    margin: 0 20px;
+    margin: 0 calc(var(--time-slot-cell-size) / 2);
     display: flex;
     flex-direction: row;
     cursor: pointer;
@@ -115,8 +111,8 @@
     cursor: ew-resize;
   }
   .slot {
-    width: 40px;
-    height: 40px;
+    width: var(--time-slot-cell-size);
+    height: var(--time-slot-cell-size);
     background-color: #ddd;
     transition: background-color 0.2s;
   }
@@ -124,13 +120,13 @@
     background-color: #ccc;
   }
   .slot:first-child {
-    border-radius: 8px 0 0 8px;
+    border-radius: var(--radius-2) 0 0 var(--radius-2);
   }
   .slot:last-child {
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 var(--radius-2) var(--radius-2) 0;
   }
   .slot:not(:last-child) {
-    border-right: 1px solid white;
+    border-right: 1px solid var(--background);
   }
   .slot.selected {
     background-color: #f44;
