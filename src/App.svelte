@@ -12,8 +12,8 @@
 </script>
 
 <header>
-  <div>Timezone overlap calculator</div>
-  <div>There is {overlap} {overlap === 1 ? 'hour' : 'hours'} of overlap</div>
+  <div class="title">Timezone overlap calculator</div>
+  <div class="overlap">There is {overlap} {overlap === 1 ? 'hour' : 'hours'} of overlap</div>
 </header>
 <main>
   <TimezoneInput bind:offset={offsetA} />
@@ -25,15 +25,21 @@
   header {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     background-color: #eee;
-    height: 60px;
+    padding: var(--spacing-4) var(--spacing-6);
+  }
+  .overlap {
+    font-weight: bold;
+    border-radius: var(--radius-1);
+    background-color: #b5ebb5;
+    padding: var(--spacing-2);
   }
   main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--spacing-6);
-    margin-top: var(--spacing-6);
+    gap: var(--spacing-7);
+    padding-top: var(--spacing-7);
   }
 </style>
