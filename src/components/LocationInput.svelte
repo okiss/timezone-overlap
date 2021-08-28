@@ -181,6 +181,9 @@
   .suggestion {
     padding: var(--spacing-3);
   }
+  .suggestion:last-child {
+    border-radius: 0 0 var(--radius-2) var(--radius-2);
+  }
   .suggestion:not(:last-child) {
     border-bottom: 1px solid #ddd;
   }
