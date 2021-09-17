@@ -136,10 +136,6 @@
     border-radius: var(--radius-2);
     filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.1));
     gap: var(--spacing-2);
-    transition: filter 0.5s ease;
-  }
-  .input-wrapper:hover {
-    filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.18));
   }
   .input-wrapper.suggestions-visible {
     border-radius: var(--radius-2) var(--radius-2) 0 0;
@@ -154,17 +150,19 @@
     background-color: rgb(245, 245, 245);
     padding: var(--spacing-2) var(--spacing-3);
     font-size: 100%;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
     position: relative;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
+    box-shadow: none;
   }
   .input:focus {
     outline: none;
     background-color: rgb(255, 255, 255);
+    box-shadow: 0 0 8px hsla(220, 100%, 50%, 0.5);
   }
   .input::placeholder {
     color: #222;
