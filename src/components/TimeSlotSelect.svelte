@@ -97,7 +97,6 @@
     justify-content: center;
     user-select: none;
     font-family: var(--font-monospace);
-    font-weight: bold;
   }
 
   .slots {

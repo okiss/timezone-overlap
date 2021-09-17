@@ -35,14 +35,14 @@
 </script>
 
 <div>
-  <div class="label-top">{labelA || ' '}</div>
+  <div class="label label-top">{labelA || ' '}</div>
   <div class="timeselect-align" style="transform: translateX({translate}px)">
     <TimeSelect bind:value={slotsA} />
   </div>
   <div class="timeselect-align" style="transform: translateX({-translate}px)">
     <TimeSelect bind:value={slotsB} mirrorLayout={true} />
   </div>
-  <div class="label-bottom">{labelB || ' '}</div>
+  <div class="label label-bottom">{labelB || ' '}</div>
 </div>
 
 <style>
@@ -52,12 +52,14 @@
     align-items: center;
     justify-content: center;
   }
-  .label-top {
+  .label {
     text-align: center;
+    color: #555;
+  }
+  .label-top {
     padding-bottom: var(--spacing-4);
   }
   .label-bottom {
-    text-align: center;
     padding-top: var(--spacing-4);
   }
 </style>
