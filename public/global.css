@@ -130,7 +130,9 @@ table {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  min-width: 1000px;
 }
+
 html {
   box-sizing: border-box;
 }
@@ -155,4 +157,6 @@ html {
   --radius-2: 8px;
 
   --time-slot-cell-size: 40px;
+
+  --font-monospace: Consolas, monaco, monospace;
 }

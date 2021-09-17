@@ -96,7 +96,7 @@
     align-items: center;
     justify-content: center;
     user-select: none;
-    font-family: 'Consolas', monospace;
+    font-family: var(--font-monospace);
     font-weight: bold;
   }
 
