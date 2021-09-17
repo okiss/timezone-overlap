@@ -2,6 +2,7 @@
   import type { Location } from '../model';
 
   import { createEventDispatcher } from 'svelte';
+  import { fade } from 'svelte/transition';
 
   import { locationSearch } from '../api';
   import { debounce } from '../util';
@@ -32,6 +33,9 @@
     try {
       isLoadingSuggestions = true;
       suggestions = await locationSearch(searchText);
+      if (suggestions.length) {
+        selectedSuggestionIndex = 0;
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -39,10 +43,10 @@
     }
   };
 
-  const clear = () => {
+  const clearInput = () => {
+    value = '';
     suggestions = [];
     selectedSuggestionIndex = -1;
-    value = '';
     input.focus();
     dispatch('clear' as any);
   };
@@ -53,9 +57,8 @@
       return;
     }
     value = suggestions[selectedSuggestionIndex].name;
-    input.blur();
     dispatch('submit' as any, suggestions[selectedSuggestionIndex]);
-    suggestions = [];
+    input.blur();
   };
 
   const selectSuggestion = (index: number) => {
@@ -67,10 +70,14 @@
     submit();
   };
 
-  const selectSuggestionArrowKeys = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowDown') {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      submit();
+    } else if (e.key === 'Escape') {
+      input.blur();
+    } else if (e.key === 'ArrowDown') {
       selectSuggestion(Math.min(selectedSuggestionIndex + 1, suggestions.length - 1));
-    } else if (e.key === 'ArrowUp') {
+    } else if (e.key === 'ArrowUp' && selectedSuggestionIndex !== -1) {
       selectSuggestion(Math.max(selectedSuggestionIndex - 1, 0));
     }
   };
@@ -85,13 +92,12 @@
         type="text"
         bind:value
         bind:this={input}
-        on:keydown={selectSuggestionArrowKeys}
+        on:keydown={handleKeyDown}
         on:input={debounce(searchLocation)}
-        on:change={submit}
         on:focus={() => (isFocused = true)}
         on:blur={() => (isFocused = false)}
       />
-      <button class="input-clear-button" on:click={clear} title="Clear" disabled={!value}
+      <button class="input-clear-button" on:click={clearInput} title="Clear" disabled={!value}
         >{'\u00d7'}</button
       >
     </div>
@@ -101,20 +107,22 @@
       >
     </LoadingOverlay>
   </div>
-  <div class="suggestions-wrapper" class:suggestions-visible={isFocused && suggestions.length}>
-    <ul class="suggestions-list">
-      {#each suggestions as { name, id }, index (id)}
-        <li
-          class="suggestion"
-          class:selected={selectedSuggestionIndex === index}
-          on:click={() => selectAndSubmit(index)}
-          on:mouseenter={() => selectSuggestion(index)}
-        >
-          {name}
-        </li>
-      {/each}
-    </ul>
-  </div>
+  {#if isFocused && suggestions.length}
+    <div class="suggestions-wrapper" transition:fade={{ duration: 200 }}>
+      <ul class="suggestions-list">
+        {#each suggestions as { name, id }, index (id)}
+          <li
+            class="suggestion"
+            class:selected={selectedSuggestionIndex === index}
+            on:click={() => selectAndSubmit(index)}
+            on:mouseenter={() => selectSuggestion(index)}
+          >
+            {name}
+          </li>
+        {/each}
+      </ul>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -131,7 +139,7 @@
     transition: filter 0.5s ease;
   }
   .input-wrapper:hover {
-    filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.15));
+    filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.18));
   }
   .input-wrapper.suggestions-visible {
     border-radius: var(--radius-2) var(--radius-2) 0 0;
@@ -146,7 +154,7 @@
     background-color: rgb(245, 245, 245);
     padding: var(--spacing-2) var(--spacing-3);
     font-size: 100%;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease;
     position: relative;
     top: 0;
     bottom: 0;
@@ -158,6 +166,9 @@
     outline: none;
     background-color: rgb(255, 255, 255);
   }
+  .input::placeholder {
+    color: #222;
+  }
   .input-clear-button {
     position: absolute;
     right: 0;
@@ -167,35 +178,32 @@
     cursor: pointer;
     font-size: 100%;
     padding: var(--spacing-2) var(--spacing-3);
+    opacity: 1;
+    transition: opacity 0.2s ease;
   }
   .input-clear-button:disabled {
-    cursor: not-allowed;
+    opacity: 0;
+    pointer-events: none;
   }
   .button {
     border: none;
     background: transparent;
     font-size: 100%;
     padding: var(--spacing-2) var(--spacing-2);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease;
     border-radius: var(--radius-1);
     cursor: pointer;
   }
   .button:disabled {
     cursor: not-allowed;
+    color: #444;
   }
   .button:not(:disabled):hover {
     background-color: #ccc;
   }
   .suggestions-wrapper {
     position: relative;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease;
     z-index: 1;
-  }
-  .suggestions-wrapper.suggestions-visible {
-    opacity: 1;
-    visibility: visible;
   }
   .suggestions-list {
     list-style-type: none;
