@@ -78,19 +78,23 @@
 
 <div class="location-input">
   <div class="input-wrapper" class:suggestions-visible={isFocused && suggestions.length}>
-    <input
-      class="input"
-      {placeholder}
-      type="text"
-      {value}
-      bind:this={input}
-      on:keydown={selectSuggestionArrowKeys}
-      on:input={debounce(searchLocation)}
-      on:change={submit}
-      on:focus={() => (isFocused = true)}
-      on:blur={() => (isFocused = false)}
-    />
-    <button class="button" on:click={clear} title="Clear">{'\u00d7'}</button>
+    <div class="input-clearable">
+      <input
+        class="input"
+        {placeholder}
+        type="text"
+        bind:value
+        bind:this={input}
+        on:keydown={selectSuggestionArrowKeys}
+        on:input={debounce(searchLocation)}
+        on:change={submit}
+        on:focus={() => (isFocused = true)}
+        on:blur={() => (isFocused = false)}
+      />
+      <button class="input-clear-button" on:click={clear} title="Clear" disabled={!value}
+        >{'\u00d7'}</button
+      >
+    </div>
     <LoadingOverlay isLoading={isLoadingSuggestions || isLoading}>
       <button class="button" on:click={submit} disabled={selectedSuggestionIndex === -1}
         >Select</button
@@ -132,18 +136,40 @@
   .input-wrapper.suggestions-visible {
     border-radius: var(--radius-2) var(--radius-2) 0 0;
   }
-  .input {
+  .input-clearable {
     flex: auto;
+    position: relative;
+  }
+  .input {
     border: none;
     border-radius: var(--radius-1);
     background-color: rgb(245, 245, 245);
-    padding: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-3);
     font-size: 100%;
     transition: background-color 0.3s ease;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
   }
   .input:focus {
     outline: none;
     background-color: rgb(255, 255, 255);
+  }
+  .input-clear-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 100%;
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+  .input-clear-button:disabled {
+    cursor: not-allowed;
   }
   .button {
     border: none;
