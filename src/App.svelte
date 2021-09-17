@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { fly } from 'svelte/transition';
+
   import TimeSlots from './components/TimeSlots.svelte';
   import TimezoneInput from './components/TimezoneInput.svelte';
 
@@ -13,7 +15,11 @@
 
 <header>
   <div class="title">Time zone overlap calculator</div>
-  <div class="overlap">There is {overlap} {overlap === 1 ? 'hour' : 'hours'} of overlap</div>
+  <div class="overlap">
+    There is {#key overlap}<span style="display: inline-block" in:fly={{ y: -20 }}>{overlap}</span
+      >{/key}
+    {overlap === 1 ? 'hour' : 'hours'} of overlap
+  </div>
 </header>
 <main>
   <div class="inputs">
@@ -44,8 +50,12 @@
     font-family: var(--font-monospace);
   }
   .overlap {
+    min-width: 280px;
+    text-align: center;
+    font-size: 20px;
     font-weight: bold;
-    border-radius: var(--radius-1);
+    border-radius: var(--radius-2);
+    color: var(--primary);
     background-color: #b5ebb5;
     padding: var(--spacing-2);
     box-shadow: 0 0 16px #b5ebb594;
