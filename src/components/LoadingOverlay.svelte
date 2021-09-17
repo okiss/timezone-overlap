@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Loader from './Loader.svelte';
   export let isLoading = false;
 </script>
 
@@ -6,7 +7,7 @@
   <div class="slot-wrapper">
     <slot />
   </div>
-  <div class="loader">···</div>
+  <div class="loader"><Loader /></div>
 </div>
 
 <style>

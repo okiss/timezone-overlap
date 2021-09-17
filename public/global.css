@@ -144,6 +144,7 @@ html {
 
 :root {
   --background: white;
+  --primary: #18244f;
 
   --spacing-1: 4px;
   --spacing-2: 8px;

@@ -35,7 +35,7 @@
     align-items: center;
     justify-content: space-between;
     padding: var(--spacing-4) var(--spacing-6);
-    background: #18244f;
+    background: var(--primary);
     box-shadow: 0 0 40px #0028ff29;
   }
   .title {

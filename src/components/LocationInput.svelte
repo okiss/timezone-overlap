@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Location } from '../model';
+
   import { createEventDispatcher } from 'svelte';
 
   import { locationSearch } from '../api';
@@ -8,11 +10,11 @@
   export let isLoading = false;
   export let placeholder = 'Location';
 
-  const dispatch = createEventDispatcher<{ id: string; name: string }>();
+  const dispatch = createEventDispatcher<Location>();
 
   let value = '';
   let input: HTMLInputElement;
-  let suggestions: { name: string; id: string }[] = [];
+  let suggestions: Location[] = [];
   let selectedSuggestionIndex = -1;
   let isFocused = false;
   let isLoadingSuggestions = false;
@@ -134,14 +136,14 @@
     flex: auto;
     border: none;
     border-radius: var(--radius-1);
-    background-color: rgb(234, 234, 234);
+    background-color: rgb(245, 245, 245);
     padding: var(--spacing-2);
     font-size: 100%;
     transition: background-color 0.3s ease;
   }
   .input:focus {
     outline: none;
-    background-color: rgb(250, 250, 250);
+    background-color: rgb(255, 255, 255);
   }
   .button {
     border: none;

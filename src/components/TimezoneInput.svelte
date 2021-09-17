@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Location } from '../model';
+
   import { getTimezone } from '../api';
   import LocationInput from './LocationInput.svelte';
 
@@ -9,7 +11,7 @@
   let timeZoneName = '';
   let isLoading = false;
 
-  const onLocationSelected = async (event: CustomEvent<{ id: string; name: string }>) => {
+  const onLocationSelected = async (event: CustomEvent<Location>) => {
     isLoading = true;
     try {
       const result = await getTimezone(event.detail.id);
