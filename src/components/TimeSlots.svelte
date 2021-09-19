@@ -1,8 +1,11 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-
-  import { countSlots, createTimeSlotArray, mergeSlotListsWithTimezones } from '../timeSlotUtil';
-  import TimeSelect from './TimeSlotSelect.svelte';
+  import {
+    countSlots,
+    createTimeSlotArray,
+    mergeSlotListsWithTimezones,
+  } from '../util/timeSlotUtil';
+  import TimeSlotSelect from './TimeSlotSelect.svelte';
 
   export let slotsA: boolean[] = createTimeSlotArray();
   export let slotsB: boolean[] = createTimeSlotArray(9, 17);
@@ -18,9 +21,11 @@
     let offsetDiff = offsetB - offsetA;
     if (offsetDiff > 12) {
       offsetDiff -= 24;
+      dispatch('dayShifted' as any, -1);
     }
     if (offsetDiff < -12) {
       offsetDiff += 24;
+      dispatch('dayShifted' as any, +1);
     }
     translate = offsetDiff * 20;
   }
@@ -37,10 +42,10 @@
 <div>
   <div class="label label-top">{labelA || ' '}</div>
   <div class="timeselect-align" style="transform: translateX({translate}px)">
-    <TimeSelect bind:value={slotsA} />
+    <TimeSlotSelect bind:value={slotsA} />
   </div>
   <div class="timeselect-align" style="transform: translateX({-translate}px)">
-    <TimeSelect bind:value={slotsB} mirrorLayout={true} />
+    <TimeSlotSelect bind:value={slotsB} mirrorLayout={true} />
   </div>
   <div class="label label-bottom">{labelB || ' '}</div>
 </div>

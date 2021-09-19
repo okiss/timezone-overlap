@@ -1,17 +1,18 @@
 <script lang="ts">
-  import type { Location } from '../model';
-
-  import { createEventDispatcher } from 'svelte';
+  import type { Alert, Location } from '../model';
+  import { createEventDispatcher, getContext } from 'svelte';
   import { fade } from 'svelte/transition';
-
   import { locationSearch } from '../api';
-  import { debounce } from '../util';
+  import { Context } from '../model';
+  import { debounce } from '../util/debounce';
   import LoadingOverlay from './LoadingOverlay.svelte';
 
   export let isLoading = false;
   export let placeholder = 'Location';
 
   const dispatch = createEventDispatcher<Location>();
+  const alert: (alert: Alert) => void = getContext(Context.ALERTS);
+  const debouncedAlert = debounce(alert, 2000);
 
   let value = '';
   let input: HTMLInputElement;
@@ -37,6 +38,7 @@
         selectedSuggestionIndex = 0;
       }
     } catch (error) {
+      debouncedAlert({ type: 'error', message: 'Could not load suggestions' });
       console.error(error);
     } finally {
       isLoadingSuggestions = false;

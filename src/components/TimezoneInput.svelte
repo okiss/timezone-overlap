@@ -1,12 +1,15 @@
 <script lang="ts">
-  import type { Location } from '../model';
-
+  import type { Alert, Location } from '../model';
+  import { getContext } from 'svelte';
   import { getTimezone } from '../api';
+  import { Context } from '../model';
   import LocationInput from './LocationInput.svelte';
 
   export let offset = 0;
   export let location = '';
   export let placeholder = '';
+
+  const alert: (alert: Alert) => void = getContext(Context.ALERTS);
 
   let timeZoneName = '';
   let isLoading = false;
@@ -19,6 +22,7 @@
       offset = Math.round(result.rawOffset / 60 / 60);
       timeZoneName = result.timeZoneName;
     } catch (error) {
+      alert({ type: 'error', message: 'Could not load time zone information' });
       console.error(error);
     } finally {
       isLoading = false;

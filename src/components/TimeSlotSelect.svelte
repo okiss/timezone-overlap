@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { createTimeSlotArray } from '../timeSlotUtil';
-
+  import { createTimeSlotArray } from '../util/timeSlotUtil';
   export let startHour = 6;
   export let endHour = 22;
   export let mirrorLayout = false;
@@ -12,7 +11,6 @@
   let isSelecting = false;
   let selectionInitialized = false;
   let selectionStartValue: boolean;
-  let selectionStartIndex: number;
 
   const changeTimeSlotValue = (index: number, slotValue: boolean) => {
     value = [...value.slice(0, index), slotValue, ...value.slice(index + 1)];
@@ -24,7 +22,6 @@
 
     if (!selectionInitialized) {
       selectionStartValue = value[index];
-      selectionStartIndex = index;
       selectionInitialized = true;
     }
 
@@ -49,7 +46,7 @@
 
 <div class="time-select" class:mirror={mirrorLayout}>
   <div class="hours">
-    {#each displayedHours as hour, i}
+    {#each displayedHours as hour}
       <div class="hour">
         {hour}
       </div>
