@@ -27,7 +27,7 @@ async function googleMapsApi<T>(
   if (!googleResponse.ok) {
     throw new HTTPError(googleResponse.status, 'Error contacting Google Maps API');
   }
-  if (googleResponseData.status !== 'OK' || googleResponseData.status !== 'ZERO_RESULTS') {
+  if (!(googleResponseData.status === 'OK' || googleResponseData.status === 'ZERO_RESULTS')) {
     throw new HTTPError(500, 'Google Maps: ' + (googleResponseData.error_message || 'Error'));
   }
   if (!validate(googleResponseData)) {
