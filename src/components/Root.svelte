@@ -32,7 +32,7 @@
 </script>
 
 <header>
-  <div class="title">Time zone overlap calculator</div>
+  <h1>Time zone overlap calculator</h1>
   <div class="overlap">
     There is {#key overlap}<span style="display: inline-block" in:fly={{ y: -20 }}>{overlap}</span
       >{/key}
@@ -73,7 +73,9 @@
     background: var(--primary);
     box-shadow: 0 0 40px #0028ff29;
   }
-  .title {
+  h1 {
+    margin: 0;
+    font-size: 20px;
     color: #ffeed0;
     text-transform: uppercase;
     font-family: var(--font-monospace);

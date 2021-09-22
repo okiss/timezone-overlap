@@ -71,6 +71,8 @@
           class="slot"
           class:selected={slot}
           tabindex="0"
+          aria-selected={slot}
+          aria-label={`hour ${i} to ${i + 1}`}
           on:keydown={keyboardSelect(i)}
           on:pointerdown={startDragSelection(i)}
           on:pointerover={dragEnterCell(i)}
