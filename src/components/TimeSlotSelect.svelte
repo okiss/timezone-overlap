@@ -44,7 +44,7 @@
   };
 
   const keyboardSelect = (index: number) => (e: any) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.key === ' ') {
       changeTimeSlotValue(index, !value[index]);
     }
   };
