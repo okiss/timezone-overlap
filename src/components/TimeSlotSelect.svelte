@@ -61,8 +61,9 @@
   <div
     class="slots"
     class:is-selecting={isSelecting}
-    on:mouseup={endDragSelection}
-    on:mouseleave={endDragSelection}
+    on:pointerup={endDragSelection}
+    on:pointerleave={endDragSelection}
+    on:pointercancel={endDragSelection}
   >
     {#each value as slot, i}
       {#if i >= startHour && i < endHour}
@@ -71,8 +72,8 @@
           class:selected={slot}
           tabindex="0"
           on:keydown={keyboardSelect(i)}
-          on:mousedown={startDragSelection(i)}
-          on:mouseenter={dragEnterCell(i)}
+          on:pointerdown={startDragSelection(i)}
+          on:pointerover={dragEnterCell(i)}
         />
       {/if}
     {/each}
