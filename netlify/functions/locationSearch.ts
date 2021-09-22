@@ -1,6 +1,6 @@
 import type { Handler } from '@netlify/functions';
-import { API_TYPE, AutocompleteResponse } from '../model';
-import { googleMapsApi, HTTPError } from '../util';
+import { autocomplete } from '../googleMaps';
+import { HTTPError } from '../util';
 
 const handler: Handler = async (event, context) => {
   const query = event.queryStringParameters?.query;
@@ -13,11 +13,7 @@ const handler: Handler = async (event, context) => {
 
   try {
     let response;
-    response = await googleMapsApi<AutocompleteResponse>(
-      API_TYPE.AUTOCOMPLETE,
-      { input: query, types: '(cities)' },
-      (data) => Array.isArray(data?.predictions)
-    );
+    response = await autocomplete(query);
 
     const data = response.predictions.map(({ description, place_id }) => ({
       name: description,
