@@ -15,7 +15,6 @@
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-    line-height: 1;
   }
 
   :global(body) {

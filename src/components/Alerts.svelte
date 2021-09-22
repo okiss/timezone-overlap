@@ -34,7 +34,8 @@
       class:warning={alert.type === 'warning'}
       class:success={alert.type === 'success'}
     >
-      {alert.message}
+      <div class="alert-message">{alert.message}</div>
+      <button class="close-button" on:click={() => removeAlert(id)}>{'\u00d7'}</button>
     </div>
   {/each}
 </div>
@@ -49,20 +50,51 @@
     flex-direction: column;
     gap: var(--spacing-3);
     padding: var(--spacing-4);
-    align-items: center;
+    align-items: flex-end;
   }
   .alert {
     width: 400px;
-    padding: var(--spacing-2);
+    display: flex;
     border-radius: var(--radius-1);
+    transition: box-shadow 0.4s ease;
+  }
+  .alert-message {
+    flex: auto;
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+  .close-button {
+    flex: none;
+    width: 40px;
+    font-size: 16px;
+    border-radius: 0 var(--radius-1) var(--radius-1) 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    background-color: #fff1;
+    transition: background-color 0.4s ease;
+  }
+  .close-button:hover {
+    background-color: #fff3;
   }
   .error {
-    background-color: pink;
+    background-color: #ea868f;
+    box-shadow: 0 0 12px #ea868f33;
+  }
+  .error:hover {
+    box-shadow: 0 0 12px #ea868fcc;
   }
   .warning {
-    background-color: sandybrown;
+    background-color: #feb272;
+    box-shadow: 0 0 12px #feb27233;
+  }
+  .warning:hover {
+    box-shadow: 0 0 12px #feb272cc;
   }
   .success {
-    background-color: seagreen;
+    background-color: #75b798;
+    box-shadow: 0 0 12px #75b79833;
+  }
+  .success:hover {
+    box-shadow: 0 0 12px #75b798cc;
   }
 </style>
