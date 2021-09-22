@@ -42,6 +42,12 @@
       endDragSelection();
     }
   };
+
+  const keyboardSelect = (index: number) => (e: any) => {
+    if (e.key === 'Enter') {
+      changeTimeSlotValue(index, !value[index]);
+    }
+  };
 </script>
 
 <div class="time-select" class:mirror={mirrorLayout}>
@@ -60,9 +66,11 @@
   >
     {#each value as slot, i}
       {#if i >= startHour && i < endHour}
-        <div
+        <button
           class="slot"
           class:selected={slot}
+          tabindex="0"
+          on:keydown={keyboardSelect(i)}
           on:mousedown={startDragSelection(i)}
           on:mouseenter={dragEnterCell(i)}
         />
@@ -100,17 +108,18 @@
     margin: 0 calc(var(--time-slot-cell-size) / 2);
     display: flex;
     flex-direction: row;
-    cursor: pointer;
     filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.1));
-  }
-  .is-selecting {
-    cursor: ew-resize;
   }
   .slot {
     width: var(--time-slot-cell-size);
     height: var(--time-slot-cell-size);
     background-color: #ddd;
+    border: none;
+    cursor: pointer;
     transition: background-color 0.2s;
+  }
+  .is-selecting .slot {
+    cursor: ew-resize;
   }
   .slot:hover {
     background-color: #ccc;
