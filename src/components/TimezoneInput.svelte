@@ -7,6 +7,7 @@
 
   export let offset = 0;
   export let location = '';
+  export let label = 'Location';
   export let placeholder = '';
 
   const alert: (alert: Alert) => void = getContext(Context.ALERTS);
@@ -42,7 +43,13 @@
 </script>
 
 <div class="time-zone-input">
-  <LocationInput {isLoading} {placeholder} on:submit={onLocationSelected} on:clear={onClear} />
+  <LocationInput
+    {isLoading}
+    {label}
+    {placeholder}
+    on:submit={onLocationSelected}
+    on:clear={onClear}
+  />
   <div class="info">
     <span class="offset">{offsetText}</span> <span>{timeZoneText}</span>
   </div>

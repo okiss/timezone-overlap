@@ -41,11 +41,17 @@
 </header>
 <main>
   <div class="inputs">
-    <TimezoneInput bind:offset={offsetA} bind:location={locationA} placeholder={'Your location'} />
     <TimezoneInput
+      label={'Your location'}
+      placeholder={'Cape Town'}
+      bind:offset={offsetA}
+      bind:location={locationA}
+    />
+    <TimezoneInput
+      label={"Client's location"}
+      placeholder={'San Francisco'}
       bind:offset={offsetB}
       bind:location={locationB}
-      placeholder={"Client's location"}
     />
   </div>
   <TimeSlots

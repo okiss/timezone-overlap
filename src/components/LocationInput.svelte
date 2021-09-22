@@ -8,7 +8,8 @@
   import LoadingOverlay from './LoadingOverlay.svelte';
 
   export let isLoading = false;
-  export let placeholder = 'Location';
+  export let label = 'Location';
+  export let placeholder = '';
 
   const dispatch = createEventDispatcher<Location>();
   const alert: (alert: Alert) => void = getContext(Context.ALERTS);
@@ -20,6 +21,8 @@
   let selectedSuggestionIndex = -1;
   let isFocused = false;
   let isLoadingSuggestions = false;
+
+  const inputId = `${Math.random()}`;
 
   const searchLocation = async (e: any) => {
     const searchText: string = e.target.value;
@@ -86,9 +89,11 @@
 </script>
 
 <div class="location-input">
+  <label for={inputId}>{label}</label>
   <div class="input-wrapper" class:suggestions-visible={isFocused && suggestions.length}>
     <div class="input-clearable">
       <input
+        id={inputId}
         class="input"
         {placeholder}
         type="text"
@@ -130,6 +135,12 @@
 <style>
   .location-input {
     width: 400px;
+  }
+  label {
+    display: block;
+    text-align: center;
+    margin-bottom: var(--spacing-4);
+    color: #555;
   }
   .input-wrapper {
     display: flex;
