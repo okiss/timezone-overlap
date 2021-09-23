@@ -71,7 +71,8 @@
           class="slot"
           class:selected={slot}
           tabindex="0"
-          aria-selected={slot}
+          role="checkbox"
+          aria-checked={slot}
           aria-label={`hour ${i} to ${i + 1}`}
           on:keydown={keyboardSelect(i)}
           on:pointerdown={startDragSelection(i)}

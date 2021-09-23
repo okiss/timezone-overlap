@@ -14,6 +14,9 @@
   export let labelA = '';
   export let labelB = '';
 
+  const labelAid = `${Math.random()}`;
+  const labelBid = `${Math.random()}`;
+
   const dispatch = createEventDispatcher<number>();
 
   let translate = 0;
@@ -40,14 +43,22 @@
 </script>
 
 <div>
-  <div class="label label-top">{labelA || ' '}</div>
-  <div class="timeselect-align" style="transform: translateX({translate}px)">
+  <div id={labelAid} class="label label-top">{labelA || ' '}</div>
+  <div
+    aria-labelledby={labelAid}
+    class="timeselect-align"
+    style="transform: translateX({translate}px)"
+  >
     <TimeSlotSelect bind:value={slotsA} />
   </div>
-  <div class="timeselect-align" style="transform: translateX({-translate}px)">
+  <div
+    aria-labelledby={labelBid}
+    class="timeselect-align"
+    style="transform: translateX({-translate}px)"
+  >
     <TimeSlotSelect bind:value={slotsB} mirrorLayout={true} />
   </div>
-  <div class="label label-bottom">{labelB || ' '}</div>
+  <div id={labelBid} class="label label-bottom">{labelB || ' '}</div>
 </div>
 
 <style>
