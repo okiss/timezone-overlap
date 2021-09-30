@@ -10,18 +10,35 @@ export const mergeSlotLists = (listA: boolean[], listB: boolean[]): boolean[] =>
   return listA.map((value, index) => value && listB[index]);
 };
 
-export const adjustSlotListToUTC = (slotList: boolean[], utcOffset: number) => {
-  const offset = utcOffset > 0 ? utcOffset : utcOffset + slotList.length;
-  return slotList.slice(offset).concat(slotList.slice(0, offset));
+export const shiftSlots = (slotList: boolean[], offset: number) => {
+  const adjustedOffset = offset > 0 ? offset : offset + slotList.length;
+  return slotList.slice(adjustedOffset).concat(slotList.slice(0, adjustedOffset));
 };
 
-export const mergeSlotListsWithTimezones = (
-  listA: boolean[],
-  listB: boolean[],
-  utcOffsetA: number,
-  utcOffsetB: number
-): boolean[] => {
-  const adjustedA = adjustSlotListToUTC(listA, utcOffsetA);
-  const adjustedB = adjustSlotListToUTC(listB, utcOffsetB);
-  return mergeSlotLists(adjustedA, adjustedB);
+export const divideTimeSlots = (slotList: boolean[], factor: number) =>
+  new Array(slotList.length * factor).fill(false).map((_, i) => slotList[Math.floor(i / factor)]);
+
+export const utcOffsetToSlotShift = (utcOffsetMinutes: number, precision: number) =>
+  Math.floor(utcOffsetMinutes / (60 / precision));
+
+export const countOverlap = (
+  slotsA: boolean[],
+  slotsB: boolean[],
+  utcOffsetMinutesA: number,
+  utcOffsetMinutesB: number,
+  precision = 4
+) => {
+  const dividedSlotsA = divideTimeSlots(slotsA, precision);
+  const dividedSlotsB = divideTimeSlots(slotsB, precision);
+
+  const offsetAInSlots = utcOffsetToSlotShift(utcOffsetMinutesA, precision);
+  const offsetBInSlots = utcOffsetToSlotShift(utcOffsetMinutesB, precision);
+
+  const adjustedA = shiftSlots(dividedSlotsA, offsetAInSlots);
+  const adjustedB = shiftSlots(dividedSlotsB, offsetBInSlots);
+
+  const overlapInSlots = countSlots(mergeSlotLists(adjustedA, adjustedB));
+  const overlapInHours = overlapInSlots / precision;
+
+  return overlapInHours;
 };

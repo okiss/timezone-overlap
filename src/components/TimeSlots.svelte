@@ -1,10 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import {
-    countSlots,
-    createTimeSlotArray,
-    mergeSlotListsWithTimezones,
-  } from '../util/timeSlotUtil';
+  import { countOverlap, createTimeSlotArray } from '../util/timeSlotUtil';
   import TimeSlotSelect from './TimeSlotSelect.svelte';
 
   export let slotsA: boolean[] = createTimeSlotArray();
@@ -21,7 +17,7 @@
 
   let translate = 0;
   $: {
-    let offsetDiff = offsetB - offsetA;
+    let offsetDiff = offsetB / 60 - offsetA / 60;
     if (offsetDiff > 12) {
       offsetDiff -= 24;
       dispatch('dayShifted' as any, -1);
@@ -34,10 +30,7 @@
   }
 
   $: {
-    const overlapCount =
-      slotsA && slotsB
-        ? countSlots(mergeSlotListsWithTimezones(slotsA, slotsB, offsetA, offsetB))
-        : 0;
+    const overlapCount = slotsA && slotsB ? countOverlap(slotsA, slotsB, offsetA, offsetB) : 0;
     dispatch('change' as any, overlapCount);
   }
 </script>

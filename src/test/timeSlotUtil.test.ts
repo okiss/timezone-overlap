@@ -1,9 +1,11 @@
 import {
-  adjustSlotListToUTC,
+  shiftSlots,
   countSlots,
   createTimeSlotArray,
+  divideTimeSlots,
   mergeSlotLists,
-  mergeSlotListsWithTimezones,
+  countOverlap,
+  utcOffsetToSlotShift,
 } from '../util/timeSlotUtil';
 
 test('createTimeSlotArray: no arguments', () => {
@@ -76,13 +78,13 @@ test('mergeSlotLists', () => {
 });
 
 test('adjustSlotListToUTC', () => {
-  expect(adjustSlotListToUTC([false, true, false], 0)).toEqual([false, true, false]);
-  expect(adjustSlotListToUTC([false, true, false], 1)).toEqual([true, false, false]);
-  expect(adjustSlotListToUTC([false, true, false], -1)).toEqual([false, false, true]);
-  expect(adjustSlotListToUTC([true, false, false], 1)).toEqual([false, false, true]);
-  expect(adjustSlotListToUTC([false, false, true], -1)).toEqual([true, false, false]);
+  expect(shiftSlots([false, true, false], 0)).toEqual([false, true, false]);
+  expect(shiftSlots([false, true, false], 1)).toEqual([true, false, false]);
+  expect(shiftSlots([false, true, false], -1)).toEqual([false, false, true]);
+  expect(shiftSlots([true, false, false], 1)).toEqual([false, false, true]);
+  expect(shiftSlots([false, false, true], -1)).toEqual([true, false, false]);
 
-  expect(adjustSlotListToUTC(createTimeSlotArray(9, 17), -4)).toEqual(createTimeSlotArray(13, 21));
+  expect(shiftSlots(createTimeSlotArray(9, 17), -4)).toEqual(createTimeSlotArray(13, 21));
 
   const expected = [
     true,
@@ -112,27 +114,33 @@ test('adjustSlotListToUTC', () => {
   ];
   expect(expected.length).toBe(24);
   expect(countSlots(expected)).toBe(8);
-  expect(adjustSlotListToUTC(createTimeSlotArray(9, 17), -9)).toEqual(expected);
+  expect(shiftSlots(createTimeSlotArray(9, 17), -9)).toEqual(expected);
+});
+
+test('divideTimeSlots', () => {
+  expect(divideTimeSlots([], 7)).toEqual([]);
+  expect(divideTimeSlots([false, false], 1)).toEqual([false, false]);
+  expect(divideTimeSlots([false], 2)).toEqual([false, false]);
+  expect(divideTimeSlots([false, true], 2)).toEqual([false, false, true, true]);
+  expect(divideTimeSlots([false, true, false], 2)).toEqual([
+    false,
+    false,
+    true,
+    true,
+    false,
+    false,
+  ]);
+});
+
+test('utcOffsetToSlotShift', () => {
+  expect(utcOffsetToSlotShift(0, 1)).toEqual(0);
+  expect(utcOffsetToSlotShift(0, 4)).toEqual(0);
+  expect(utcOffsetToSlotShift(60, 1)).toEqual(1);
+  expect(utcOffsetToSlotShift(60, 4)).toEqual(4);
+  expect(utcOffsetToSlotShift(90, 4)).toEqual(6);
+  expect(utcOffsetToSlotShift(-90, 4)).toEqual(-6);
 });
 
 test('mergeSlotListsWithTimezones', () => {
-  expect(
-    mergeSlotListsWithTimezones(createTimeSlotArray(), createTimeSlotArray(9, 17), 0, 0)
-  ).toEqual(createTimeSlotArray());
-
-  expect(
-    mergeSlotListsWithTimezones(createTimeSlotArray(4, 12), createTimeSlotArray(8, 16), -4, 0)
-  ).toEqual(createTimeSlotArray(8, 16));
-
-  expect(
-    mergeSlotListsWithTimezones(createTimeSlotArray(9, 17), createTimeSlotArray(9, 17), 0, 0)
-  ).toEqual(createTimeSlotArray(9, 17));
-
-  expect(
-    mergeSlotListsWithTimezones(createTimeSlotArray(9, 17), createTimeSlotArray(9, 17), 3, 3)
-  ).toEqual(createTimeSlotArray(6, 14));
-
-  expect(
-    mergeSlotListsWithTimezones(createTimeSlotArray(9, 17), createTimeSlotArray(9, 17), 3, -3)
-  ).toEqual(createTimeSlotArray(12, 14));
+  expect(countOverlap(createTimeSlotArray(), createTimeSlotArray(9, 17), 0, 0)).toEqual(0);
 });

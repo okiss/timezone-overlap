@@ -20,7 +20,7 @@
     try {
       const result = await getTimezone(event.detail.id);
       location = event.detail.name;
-      offset = Math.round(result.rawOffset / 60 / 60);
+      offset = Math.round(result.rawOffset / 60);
       timeZoneName = result.timeZoneName;
     } catch (error) {
       alert({ type: 'error', message: 'Could not load time zone information' });
@@ -38,7 +38,7 @@
 
   let offsetText: string;
   let timeZoneText: string;
-  $: offsetText = `UTC${offset >= 0 ? '+' : ''}${offset}`;
+  $: offsetText = `UTC${offset >= 0 ? '+' : ''}${offset / 60}`;
   $: timeZoneText = timeZoneName ? `(${timeZoneName})` : '';
 </script>
 
