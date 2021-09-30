@@ -177,8 +177,11 @@
     background-color: rgb(255, 255, 255);
     box-shadow: 0 0 8px hsla(220, 100%, 50%, 0.5);
   }
+  .input:focus::placeholder {
+    opacity: 0;
+  }
   .input::placeholder {
-    color: #222;
+    color: #444;
   }
   .input-clear-button {
     position: absolute;
